@@ -1,0 +1,22 @@
+{
+    "name": "smichaelsen/caldera-php",
+    "description": "Caldera Records Parser",
+    "type": "library",
+    "license": "GNU GPLv3",
+    "authors": [
+        {
+            "name": "Sebastian Michaelsen",
+            "email": "sebastian@michaelsen.io"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Smichaelsen\\Caldera\\": "src/"
+        }
+    },
+    "require": {},
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.12.1"
+    }
+
+}
