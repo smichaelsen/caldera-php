@@ -4,8 +4,60 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a4ec3c160e14f1223b7405269b9d2eeb",
-    "packages": [],
+    "content-hash": "20c75bbe79cccdb85d29190610a7d358",
+    "packages": [
+        {
+            "name": "thalidzhokov/country-codes",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thalidzhokov/country-codes.git",
+                "reference": "6bcec1fb4aa064b11d2ee18d45dae549431d79dc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thalidzhokov/country-codes/zipball/6bcec1fb4aa064b11d2ee18d45dae549431d79dc",
+                "reference": "6bcec1fb4aa064b11d2ee18d45dae549431d79dc",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.6 || ^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "CountryCodes.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Albert Thalidzhokov"
+                }
+            ],
+            "description": "CountryCodes PHP Class to get array of countries with ISO 3166-1 alpha-2, ISO 3166-1 alpha-3, ISO 3166-1 numeric and ISD codes it can provide following information related to country",
+            "keywords": [
+                "3166",
+                "alpha-2",
+                "alpha-3",
+                "country calling codes",
+                "country codes",
+                "country dial in codes",
+                "idd",
+                "internatiguonal subscriber dialing",
+                "international direct dialing",
+                "international organization for standardization",
+                "isd",
+                "iso",
+                "iso-3166-1",
+                "numeric"
+            ],
+            "time": "2018-05-28T18:18:56+00:00"
+        }
+    ],
     "packages-dev": [
         {
             "name": "composer/semver",
