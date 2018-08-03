@@ -47,14 +47,19 @@ class RecordMapper
 
     private static function getValue(array $inputRecord, array $fieldConfiguration): string
     {
-        $possibleColumnNames = array_map('trim', explode('//', $fieldConfiguration['column']));
-        foreach ($possibleColumnNames as $possibleColumnName) {
-            if (!isset($inputRecord[$possibleColumnName])) {
-                continue;
-            }
-            $value = $inputRecord[$possibleColumnName];
-            if (!empty($value)) {
-                return $value;
+        if (isset($fieldConfiguration['value'])) {
+            return (string)$fieldConfiguration['value'];
+        }
+        if (isset($fieldConfiguration['column'])) {
+            $possibleColumnNames = array_map('trim', explode('//', $fieldConfiguration['column']));
+            foreach ($possibleColumnNames as $possibleColumnName) {
+                if (!isset($inputRecord[$possibleColumnName])) {
+                    continue;
+                }
+                $value = $inputRecord[$possibleColumnName];
+                if (!empty($value)) {
+                    return (string)$value;
+                }
             }
         }
         return '';
@@ -80,7 +85,7 @@ class RecordMapper
                     return false;
                 }
             } else {
-                throw new \Exception('Validators must be an existing class name or callabe', 1530261879);
+                throw new \Exception('Validators must be an existing class name or callable', 1530261879);
             }
         }
         return true;
