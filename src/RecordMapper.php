@@ -10,9 +10,19 @@ class RecordMapper
 {
     public static function mapRecords(InputGeneratorInterface $inputGenerator, MappingInterface $mapping, bool $skipInvalidRecords = true): \Generator
     {
+        $fieldNames = null;
+        $firstLineContainsFieldNames = $mapping->firstLineContainsFieldNames();
+        $mappingArray = $mapping->getMapping();
         foreach ($inputGenerator->generateInput() as $inputRecord) {
+            if ($firstLineContainsFieldNames && $fieldNames === null) {
+                $fieldNames = $inputRecord;
+                continue;
+            }
             try {
-                $outputRecord = self::map($inputRecord, $mapping);
+                if ($fieldNames !== null) {
+                    $inputRecord = array_combine($fieldNames, $inputRecord);
+                }
+                $outputRecord = self::map($inputRecord, $mappingArray);
                 yield $outputRecord;
             } catch (ValidationException $e) {
                 if (!$skipInvalidRecords) {
@@ -22,9 +32,8 @@ class RecordMapper
         }
     }
 
-    private static function map(array $inputRecord, MappingInterface $mapping): array
+    private static function map(array $inputRecord, array $mappingArray): array
     {
-        $mappingArray = $mapping->getMapping();
         $outputRecord = [];
         foreach ($mappingArray as $fieldName => $fieldConfiguration) {
             $value = self::getValue($inputRecord, $fieldConfiguration);
