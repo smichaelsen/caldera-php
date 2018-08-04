@@ -40,6 +40,7 @@ class RecordMapper
             if (!self::validate($value, $fieldConfiguration)) {
                 throw new ValidationException('Validation error for field ' . $fieldName, 1530260719);
             }
+            $value = self::transform($value, $fieldConfiguration);
             $outputRecord[$fieldName] = $value;
         }
         return $outputRecord;
@@ -89,5 +90,16 @@ class RecordMapper
             }
         }
         return true;
+    }
+
+    private static function transform($value, array $fieldConfiguration)
+    {
+        if (!isset($fieldConfiguration['transforms']) || !is_array($fieldConfiguration['transforms'])) {
+            return $value;
+        }
+        foreach ($fieldConfiguration['transforms'] as $transform) {
+            $value = call_user_func($transform, $value);
+        }
+        return $value;
     }
 }
