@@ -4,6 +4,5 @@ namespace Smichaelsen\Caldera;
 
 interface MappingInterface
 {
-    public function firstLineContainsFieldNames(): bool;
     public function getMapping(): array;
 }
