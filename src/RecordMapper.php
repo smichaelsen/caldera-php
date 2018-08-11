@@ -54,7 +54,11 @@ class RecordMapper
             return (string)$fieldConfiguration['value'];
         }
         if (isset($fieldConfiguration['column'])) {
-            $possibleColumnNames = array_map('trim', explode('//', $fieldConfiguration['column']));
+            if (is_array($fieldConfiguration['column'])) {
+                $possibleColumnNames = $fieldConfiguration['column'];
+            } else {
+                $possibleColumnNames = [$fieldConfiguration['column']];
+            }
             foreach ($possibleColumnNames as $possibleColumnName) {
                 if (is_array($inputRecord)) {
                     $value = self::getValueFromArray($inputRecord, $possibleColumnName);
