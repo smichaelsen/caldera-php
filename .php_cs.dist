@@ -68,5 +68,8 @@ return PhpCsFixer\Config::create()
         'whitespace_after_comma_in_array' => true,
     ])
     ->setFinder(
-        PhpCsFixer\Finder::create()->in(__DIR__ . '/src/')
+        PhpCsFixer\Finder::create()->in([
+            __DIR__ . '/src/',
+            __DIR__ . '/tests/',
+        ])
     );
