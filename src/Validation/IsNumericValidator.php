@@ -8,6 +8,9 @@ class IsNumericValidator implements ValidatorInterface
 {
     public function validate($input): bool
     {
+        if (is_bool($input)) {
+            return false;
+        }
         return (string)$input === '' || is_numeric($input);
     }
 }
