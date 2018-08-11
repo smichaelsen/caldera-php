@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Smichaelsen\Caldera\Test\Validation;
 
 use PHPUnit\Framework\TestCase;
@@ -12,7 +13,7 @@ class IsNotEmptyValidatorTest extends TestCase
      * @param mixed $value
      * @param bool $expected
      */
-    public function validate($value, $expected)
+    public function validate($value, bool $expected)
     {
         $validator = new IsNotEmptyValidator();
         $this->assertEquals($expected, $validator->validate($value));

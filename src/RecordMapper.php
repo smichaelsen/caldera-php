@@ -13,12 +13,12 @@ class RecordMapper
         $mappingArray = $mapping->getMapping();
         foreach ($inputGenerator->generateInput() as $inputRecord) {
             try {
-                $outputRecord = self::map($inputRecord, $mappingArray);
-                yield $outputRecord;
+                yield self::map($inputRecord, $mappingArray);
             } catch (ValidationException $e) {
-                if (!$skipInvalidRecords) {
-                    throw $e;
+                if ($skipInvalidRecords) {
+                    continue;
                 }
+                throw $e;
             }
         }
     }
@@ -50,9 +50,9 @@ class RecordMapper
             }
             foreach ($possibleColumnNames as $possibleColumnName) {
                 if (is_array($inputRecord)) {
-                    $value = self::getValueFromArray($inputRecord, $possibleColumnName);
+                    $value = InputEvaluator::getValueFromArray($inputRecord, $possibleColumnName);
                 } elseif (get_class($inputRecord) === \SimpleXMLElement::class) {
-                    $value = self::getValueFromSimpleXMLElement($inputRecord, $possibleColumnName);
+                    $value = InputEvaluator::getValueFromSimpleXMLElement($inputRecord, $possibleColumnName);
                 }
                 if (!empty($value)) {
                     return (string)$value;
@@ -60,34 +60,6 @@ class RecordMapper
             }
         }
         return '';
-    }
-
-    private static function getValueFromArray(array $inputRecord, string $valuePath)
-    {
-        $value = $inputRecord;
-        $valuePathParts = strtok($valuePath, '.');
-        while ($valuePathParts !== false) {
-            if (!isset($value[$valuePathParts])) {
-                return null;
-            }
-            $value = $value[$valuePathParts];
-            $valuePathParts = strtok('.');
-        }
-        return $value;
-    }
-
-    private static function getValueFromSimpleXMLElement(\SimpleXMLElement $inputRecord, string $valuePath)
-    {
-        $value = $inputRecord;
-        $valuePathParts = strtok($valuePath, '.');
-        while ($valuePathParts !== false) {
-            $value = $value->xpath($valuePathParts)[0];
-            if (empty((string)$value)) {
-                return null;
-            }
-            $valuePathParts = strtok('.');
-        }
-        return (string)$value;
     }
 
     private static function validate($value, array $fieldConfiguration): bool
