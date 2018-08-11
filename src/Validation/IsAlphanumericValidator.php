@@ -9,6 +9,9 @@ class IsAlphanumericValidator implements ValidatorInterface
 {
     public function validate($input): bool
     {
+        if (is_bool($input)) {
+            return false;
+        }
         return (string)$input === '' || ctype_alnum((string)$input);
     }
 }
