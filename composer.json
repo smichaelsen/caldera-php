@@ -1,23 +1,24 @@
 {
-    "name": "smichaelsen/caldera-php",
-    "description": "Caldera Records Parser",
-    "type": "library",
-    "license": "GPL-3.0-or-later",
-    "authors": [
-        {
-            "name": "Sebastian Michaelsen",
-            "email": "sebastian@michaelsen.io"
-        }
-    ],
-    "autoload": {
-        "psr-4": {
-            "Smichaelsen\\Caldera\\": "src/"
-        }
-    },
-    "require": {
-        "thalidzhokov/country-codes": "^1.0.2"
-    },
-    "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.12.1"
+  "name": "smichaelsen/caldera-php",
+  "description": "Caldera Records Parser",
+  "type": "library",
+  "license": "GPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "Sebastian Michaelsen",
+      "email": "sebastian@michaelsen.io"
     }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Smichaelsen\\Caldera\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=7.0 <7.3",
+    "thalidzhokov/country-codes": "^1.0.2"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^2.12.1"
+  }
 }
