@@ -14,14 +14,16 @@ class RecordMapper
         $firstLineContainsFieldNames = $mapping->firstLineContainsFieldNames();
         $mappingArray = $mapping->getMapping();
         foreach ($inputGenerator->generateInput() as $inputRecord) {
-            if ($firstLineContainsFieldNames && $fieldNames === null) {
-                $fieldNames = $inputRecord;
-                continue;
-            }
-            try {
+            if (is_array($inputRecord)) {
+                if ($firstLineContainsFieldNames && $fieldNames === null) {
+                    $fieldNames = $inputRecord;
+                    continue;
+                }
                 if ($fieldNames !== null) {
                     $inputRecord = array_combine($fieldNames, $inputRecord);
                 }
+            }
+            try {
                 $outputRecord = self::map($inputRecord, $mappingArray);
                 yield $outputRecord;
             } catch (ValidationException $e) {
@@ -32,7 +34,7 @@ class RecordMapper
         }
     }
 
-    private static function map(array $inputRecord, array $mappingArray): array
+    private static function map($inputRecord, array $mappingArray): array
     {
         $outputRecord = [];
         foreach ($mappingArray as $fieldName => $fieldConfiguration) {
@@ -46,7 +48,7 @@ class RecordMapper
         return $outputRecord;
     }
 
-    private static function getValue(array $inputRecord, array $fieldConfiguration): string
+    private static function getValue($inputRecord, array $fieldConfiguration): string
     {
         if (isset($fieldConfiguration['value'])) {
             return (string)$fieldConfiguration['value'];
@@ -54,16 +56,45 @@ class RecordMapper
         if (isset($fieldConfiguration['column'])) {
             $possibleColumnNames = array_map('trim', explode('//', $fieldConfiguration['column']));
             foreach ($possibleColumnNames as $possibleColumnName) {
-                if (!isset($inputRecord[$possibleColumnName])) {
-                    continue;
+                if (is_array($inputRecord)) {
+                    $value = self::getValueFromArray($inputRecord, $possibleColumnName);
+                } elseif (get_class($inputRecord) === \SimpleXMLElement::class) {
+                    $value = self::getValueFromSimpleXMLElement($inputRecord, $possibleColumnName);
                 }
-                $value = $inputRecord[$possibleColumnName];
                 if (!empty($value)) {
                     return (string)$value;
                 }
             }
         }
         return '';
+    }
+
+    private static function getValueFromArray(array $inputRecord, string $valuePath)
+    {
+        $value = $inputRecord;
+        $valuePathParts = strtok($valuePath, '.');
+        while ($valuePathParts !== false) {
+            if (!isset($value[$valuePathParts])) {
+                return null;
+            }
+            $value = $value[$valuePathParts];
+            $valuePathParts = strtok('.');
+        }
+        return $value;
+    }
+
+    private static function getValueFromSimpleXMLElement(\SimpleXMLElement $inputRecord, string $valuePath)
+    {
+        $value = $inputRecord;
+        $valuePathParts = strtok($valuePath, '.');
+        while ($valuePathParts !== false) {
+            $value = $value->xpath($valuePathParts)[0];
+            if (empty((string)$value)) {
+                return null;
+            }
+            $valuePathParts = strtok('.');
+        }
+        return (string)$value;
     }
 
     private static function validate($value, array $fieldConfiguration): bool
