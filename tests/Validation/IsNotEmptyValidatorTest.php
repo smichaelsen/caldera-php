@@ -2,9 +2,9 @@
 namespace Smichaelsen\Caldera\Test\Validation;
 
 use PHPUnit\Framework\TestCase;
-use Smichaelsen\Caldera\Validation\IsIso31661Alpha3CountryCodeValidator;
+use Smichaelsen\Caldera\Validation\IsNotEmptyValidator;
 
-class IsIso31661Alpha3CountryCodeValidatorTest extends TestCase
+class IsNotEmptyValidatorTest extends TestCase
 {
     /**
      * @test
@@ -14,24 +14,22 @@ class IsIso31661Alpha3CountryCodeValidatorTest extends TestCase
      */
     public function validate($value, $expected)
     {
-        $validator = new IsIso31661Alpha3CountryCodeValidator();
+        $validator = new IsNotEmptyValidator();
         $this->assertEquals($expected, $validator->validate($value));
     }
 
     public function dataProvider()
     {
         return [
-            ['', true],
-            ['DEU', true],
-            ['deu', false],
-            ['ATF', true],
-            ['WTF', false],
-            [true, false],
+            ['', false],
+            [true, true],
             [false, false],
-            [[], false],
+            [' abc', true],
+            ['abc', true],
+            ['abc1', true],
+            ['0', false],
             [0, false],
-            [12, false],
-            [-1, false],
+            [12, true],
         ];
     }
 }

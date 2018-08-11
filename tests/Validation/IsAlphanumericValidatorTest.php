@@ -6,10 +6,11 @@ use Smichaelsen\Caldera\Validation\IsAlphanumericValidator;
 
 class IsAlphanumericValidatorTest extends TestCase
 {
-
     /**
      * @test
      * @dataProvider dataProvider
+     * @param mixed $value
+     * @param bool $expected
      */
     public function validate($value, $expected)
     {
@@ -31,5 +32,4 @@ class IsAlphanumericValidatorTest extends TestCase
             [12, true],
         ];
     }
-
 }
