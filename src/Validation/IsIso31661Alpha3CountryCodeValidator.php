@@ -8,6 +8,9 @@ class IsIso31661Alpha3CountryCodeValidator implements ValidatorInterface
 {
     public function validate($input): bool
     {
+        if (is_bool($input) || is_array($input) ) {
+            return false;
+        }
         $input = (string)$input;
         if ($input === '') {
             return true;
