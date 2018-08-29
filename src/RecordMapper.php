@@ -51,8 +51,10 @@ class RecordMapper
             foreach ($possibleColumnNames as $possibleColumnName) {
                 if (is_array($inputRecord)) {
                     $value = InputEvaluator::getValueFromArray($inputRecord, $possibleColumnName);
-                } elseif (get_class($inputRecord) === \SimpleXMLElement::class) {
+                } elseif (is_object($inputRecord) && get_class($inputRecord) === \SimpleXMLElement::class) {
                     $value = InputEvaluator::getValueFromSimpleXMLElement($inputRecord, $possibleColumnName);
+                } else {
+                    throw new \Exception('Input record has to be an array or ' . \SimpleXMLElement::class . '.', 1535566812);
                 }
                 if (!empty($value)) {
                     return (string)$value;
