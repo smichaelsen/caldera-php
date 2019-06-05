@@ -37,10 +37,10 @@ class RecordMapper
         return $outputRecord;
     }
 
-    private static function getValue($inputRecord, array $fieldConfiguration): string
+    private static function getValue($inputRecord, array $fieldConfiguration)
     {
         if (isset($fieldConfiguration['value'])) {
-            return (string)$fieldConfiguration['value'];
+            return $fieldConfiguration['value'];
         }
         if (isset($fieldConfiguration['column'])) {
             if (is_array($fieldConfiguration['column'])) {
@@ -49,19 +49,32 @@ class RecordMapper
                 $possibleColumnNames = [$fieldConfiguration['column']];
             }
             foreach ($possibleColumnNames as $possibleColumnName) {
-                if (is_array($inputRecord)) {
-                    $value = InputEvaluator::getValueFromArray($inputRecord, $possibleColumnName);
-                } elseif (is_object($inputRecord) && get_class($inputRecord) === \SimpleXMLElement::class) {
-                    $value = InputEvaluator::getValueFromSimpleXMLElement($inputRecord, $possibleColumnName);
-                } else {
-                    throw new \Exception('Input record has to be an array or ' . \SimpleXMLElement::class . '.', 1535566812);
-                }
+                $value = self::readValueFromColumn($inputRecord, $possibleColumnName);
                 if (!empty($value)) {
                     return (string)$value;
                 }
             }
         }
-        return '';
+        if (isset($fieldConfiguration['reduce'])) {
+            $dataForReduceFunction = [];
+            foreach ($fieldConfiguration['reduce']['columns'] as $column) {
+                $dataForReduceFunction[$column] = self::readValueFromColumn($inputRecord, $column);
+            }
+            return call_user_func($fieldConfiguration['reduce']['function'], $dataForReduceFunction);
+        }
+        return null;
+    }
+
+    private static function readValueFromColumn($inputRecord, string $columnName): ?string
+    {
+        if (is_array($inputRecord)) {
+            $value = InputEvaluator::getValueFromArray($inputRecord, $columnName);
+        } elseif (get_class($inputRecord) === \SimpleXMLElement::class) {
+            $value = InputEvaluator::getValueFromSimpleXMLElement($inputRecord, $columnName);
+        } else {
+            throw new \Exception('Unsupported input record type. array or SimpleXMLElement are supported', 1559648232);
+        }
+        return $value;
     }
 
     private static function validate($value, array $fieldConfiguration): bool

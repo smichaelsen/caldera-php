@@ -3,8 +3,11 @@ namespace Smichaelsen\Caldera;
 
 final class InputEvaluator
 {
-    public static function getValueFromArray(array $inputRecord, string $valuePath)
+    public static function getValueFromArray(array $inputRecord, string $valuePath): ?string
     {
+        if (isset($inputRecord[$valuePath])) {
+            return (string)$inputRecord[$valuePath];
+        }
         $value = $inputRecord;
         $currentValuePathPart = strtok($valuePath, '.');
         while ($currentValuePathPart !== false) {
@@ -14,7 +17,7 @@ final class InputEvaluator
             $value = $value[$currentValuePathPart];
             $currentValuePathPart = strtok('.');
         }
-        return $value;
+        return (string)$value;
     }
 
     public static function getValueFromSimpleXMLElement(\SimpleXMLElement $inputRecord, string $valuePath)
