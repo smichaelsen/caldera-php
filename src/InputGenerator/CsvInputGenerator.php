@@ -4,6 +4,11 @@ namespace Smichaelsen\Caldera\InputGenerator;
 
 class CsvInputGenerator implements InputGeneratorInterface
 {
+    /**
+     * @var array
+     */
+    protected $columnNames;
+
     protected $csvHandle;
 
     protected $csvDelimiter = ',';
@@ -11,6 +16,11 @@ class CsvInputGenerator implements InputGeneratorInterface
     protected $firstRowContainsColumnNames = true;
 
     protected $skipLeadingLines = 0;
+
+    public function setColumnNames(array $columnNames)
+    {
+        $this->columnNames = $columnNames;
+    }
 
     public function setCsvHandle($csvHandle)
     {
@@ -37,7 +47,6 @@ class CsvInputGenerator implements InputGeneratorInterface
         if (!is_resource($this->csvHandle)) {
             throw new \Exception('Call ->setCsvContent() before calling ->generateInput()', 1530262326);
         }
-        $columnNames = null;
         $rowCount = 0;
         while (($inputData = fgetcsv($this->csvHandle, 0, $this->csvDelimiter)) !== false) {
             $rowCount++;
@@ -46,10 +55,12 @@ class CsvInputGenerator implements InputGeneratorInterface
             }
             if ($this->firstRowContainsColumnNames) {
                 if ($rowCount === 1) {
-                    $columnNames = $inputData;
+                    $this->columnNames = $inputData;
                     continue;
                 }
-                $inputData = array_combine($columnNames, $inputData);
+            }
+            if (is_array($this->columnNames)) {
+                $inputData = array_combine($this->columnNames, $inputData);
             }
             yield $inputData;
         }
