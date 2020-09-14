@@ -45,7 +45,7 @@ class CsvInputGenerator implements InputGeneratorInterface
     public function generateInput(): \Generator
     {
         if (!is_resource($this->csvHandle)) {
-            throw new \Exception('Call ->setCsvContent() before calling ->generateInput()', 1530262326);
+            throw new \Exception('Call ->setCsvHandle() before calling ->generateInput()', 1530262326);
         }
         $rowCount = 0;
         while (($inputData = fgetcsv($this->csvHandle, 0, $this->csvDelimiter)) !== false) {
