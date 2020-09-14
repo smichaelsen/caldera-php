@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace Smichaelsen\Caldera\InputGenerator;
 
 class CsvInputGenerator implements InputGeneratorInterface
@@ -50,14 +50,12 @@ class CsvInputGenerator implements InputGeneratorInterface
         $rowCount = 0;
         while (($inputData = fgetcsv($this->csvHandle, 0, $this->csvDelimiter)) !== false) {
             $rowCount++;
-            if ($rowCount <= $this->skipLeadingLines && !($this->firstRowContainsColumnNames && $rowCount === 1)) {
+            if ($this->firstRowContainsColumnNames && $rowCount === 1) {
+                $this->columnNames = $inputData;
                 continue;
             }
-            if ($this->firstRowContainsColumnNames) {
-                if ($rowCount === 1) {
-                    $this->columnNames = $inputData;
-                    continue;
-                }
+            if ($rowCount <= $this->skipLeadingLines) {
+                continue;
             }
             if (is_array($this->columnNames)) {
                 $inputData = array_combine($this->columnNames, $inputData);
