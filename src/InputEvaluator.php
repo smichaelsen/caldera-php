@@ -27,7 +27,7 @@ final class InputEvaluator
         while ($currentValuePathPart !== false) {
             if (is_numeric($currentValuePathPart)) {
                 $value = $value->xpath('*[' . ($currentValuePathPart + 1) . ']')[0];
-            } else {
+            } elseif (isset($value->xpath($currentValuePathPart)[0])) {
                 $value = $value->xpath($currentValuePathPart)[0];
             }
             if (empty((string)$value)) {
