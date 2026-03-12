@@ -59,7 +59,7 @@ XML;
         $this->assertSame($expectedValue, InputEvaluator::getValueFromSimpleXMLElement($xmlObject, $valuePath));
     }
 
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             ['name', 'Bob Torrance'],

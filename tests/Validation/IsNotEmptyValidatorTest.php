@@ -19,7 +19,7 @@ class IsNotEmptyValidatorTest extends TestCase
         $this->assertEquals($expected, $validator->validate($value));
     }
 
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             ['', false],

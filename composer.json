@@ -14,11 +14,21 @@
       "Smichaelsen\\Caldera\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Smichaelsen\\Caldera\\Test\\": "tests/"
+    }
+  },
   "require": {
-    "php": "^7.0 || ^8.0"
+    "php": "^7.3 || ^8.0"
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^2.12.1",
-    "phpunit/phpunit": "^6"
+    "phpunit/phpunit": "^9 || ^10 || ^11",
+    "phpstan/phpstan": "^2.1"
+  },
+  "scripts": {
+    "phpstan": "phpstan analyse",
+    "test": "phpunit"
   }
 }
