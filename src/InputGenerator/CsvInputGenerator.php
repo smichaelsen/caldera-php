@@ -5,7 +5,7 @@ namespace Smichaelsen\Caldera\InputGenerator;
 class CsvInputGenerator implements InputGeneratorInterface
 {
     /**
-     * @var array
+     * @var array|null
      */
     protected $columnNames;
 

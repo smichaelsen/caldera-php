@@ -84,7 +84,6 @@ class RecordMapper
         }
         foreach ($fieldConfiguration['validation'] as $validator) {
             if (is_string($validator) && class_exists($validator)) {
-                /** @var ValidatorInterface $validatorInstance */
                 $validatorInstance = new $validator;
                 if (!$validatorInstance instanceof ValidatorInterface) {
                     throw new \Exception($validator . ' does not implement the ValidatorInterface', 1530261769);
